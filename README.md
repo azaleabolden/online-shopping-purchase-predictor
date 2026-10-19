@@ -57,5 +57,5 @@ UCI Online Shoppers Purchasing Intention Dataset:
 https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset
 
 ## AI Assistance Disclosure
-ChatGPT was used for planning, debugging assistance, code organization, and cleanup of reproducibility materials.
-All reported model results should come from executed project code.
+ChatGPT and Claude was used for planning, troubleshooting, code organization, and cleanup of materials.
+All reported model results and reporting should come from executed project code.
