@@ -1,166 +1,100 @@
-# START HERE — Final Project Through Streamlit Demo
+# START HERE
 
-This folder continues the same Online Shopping Purchase Predictor completed in Practical Checkpoints 1 and 2.
+This folder holds the final Online Shopping Purchase Predictor project. It continues the work from Practical Checkpoints 1 and 2.
 
 ## What is already complete
 
-The project currently:
+The project:
 - loads the UCI Online Shoppers Purchasing Intention Dataset,
 - investigates and removes 125 exact duplicate rows before splitting,
 - treats `OperatingSystems`, `Browser`, `Region`, and `TrafficType` as categorical variables,
-- uses an 80/20 stratified train/test split,
+- uses an 80/20 stratified train/test split with `random_state=42`,
 - compares a majority-class baseline with Logistic Regression, Decision Tree, and Random Forest,
 - tests balanced class weighting,
 - reports Accuracy, Precision, Recall, F1-score, FP, FN, and TP,
-- identifies Random Forest as the strongest overall model by F1-score,
-- shows the precision–recall tradeoff,
-- includes a weak/failure-case workflow,
-- includes sample predictions and feature importance.
+- selects the final model with 5-fold stratified cross-validation on the training set and tunes its settings (tuned Random Forest),
+- checks how much the results depend on `PageValues`,
+- includes a weak case example, sample predictions, and feature importance,
+- includes a Streamlit demo that uses the final model.
 
-## Reported model results
+## Final results
 
-All models were tested on the same **2,441** held-out cases.
+All models were tested on the same 2,441 held-out cases.
 
-### Random Forest
-- Accuracy: 0.9029
-- Precision: 0.7617
-- Recall: 0.5524
-- F1-score: 0.6404
+| Model | Accuracy | Precision | Recall | F1-score |
+|---|---:|---:|---:|---:|
+| Random Forest, tuned (selected by cross-validation) | 0.8906 | 0.6316 | 0.7225 | 0.6740 |
+| Random Forest, default settings | 0.9029 | 0.7617 | 0.5524 | 0.6404 |
+| Logistic Regression + Balanced | 0.8460 | 0.5050 | 0.7958 | 0.6179 |
+| Random Forest, tuned, without PageValues | 0.8202 | 0.4139 | 0.3586 | 0.3843 |
 
-### Logistic Regression + Balanced
-- Accuracy: 0.8460
-- Precision: 0.5050
-- Recall: 0.7958
-- F1-score: 0.6179
-
-The Random Forest is used for the Streamlit demo because it had the strongest overall F1-score.
+Cross-validation selected Random Forest (mean F1 0.6284). Tuning raised its cross-validation F1 to 0.6839 using balanced class weights, no depth limit, and a minimum of 3 samples per leaf. The tuned Random Forest is used for the Streamlit demo.
 
 ---
 
-# Step 1 — Open the project folder in VS Code
+# Step 1. Open the project folder in VS Code
 
-Open:
-
-`Online_Shopping_Predictor_Final_Project_Through_Streamlit`
-
-Use the same Python/Jupyter environment that successfully ran Checkpoint 2.
+Use File, then Open Folder, and choose the project folder. Use the same Python environment that ran the notebook.
 
 ---
 
-# Step 2 — Install dependencies
+# Step 2. Install dependencies
 
-Open a VS Code terminal in the project folder and run:
+Open a terminal in the project folder and run:
 
 ```powershell
 python -m pip install -r requirements.txt
 ```
 
-If your current environment already contains these packages, pip will keep the installed versions or update as needed.
+The project was developed with Python 3.10.11, scikit-learn 1.7.2, pandas 2.3.3, and NumPy 2.2.6.
 
 ---
 
-# Step 3 — Run the final notebook
+# Step 3. Run the final notebook
 
-Open:
-
-`Online_Shopping_Purchase_Predictor_Final.ipynb`
-
-Then:
+Open `Online_Shopping_Purchase_Predictor_Final.ipynb`, then:
 
 1. Restart the kernel.
-2. Click **Run All**.
+2. Click **Run All**. The tuning step in Section 24A takes a few minutes.
 3. Confirm there are no red errors.
-4. Scroll to the final section:
-   **Save the Final Model for Streamlit**
-5. Confirm the notebook prints that the model was saved.
-6. Confirm the final readiness cell says:
+4. Confirm Section 25 prints that the final model was saved and shows the package versions.
+5. Confirm the last cell says `Model ready for Streamlit: True`.
+6. Save the notebook.
 
-`Model ready for Streamlit: True`
-
-Then save the notebook.
-
-The following file should now exist:
-
-`artifacts/random_forest_pipeline.joblib`
+This creates `artifacts/random_forest_pipeline.joblib`, which holds the tuned Random Forest and its preprocessing. The first run needs an internet connection because the notebook downloads the dataset.
 
 ---
 
-# Step 4 — Confirm the final results
+# Step 4. Confirm the final results
 
-In the notebook, confirm the full comparison still shows:
+In the notebook, confirm that Section 24A shows the cross-validation table with Random Forest selected, the best tuned settings, and the final test row for the tuned Random Forest (F1 0.6740). Confirm the full comparison in Section 12 still matches the default model results in the paper.
 
-| Model | Accuracy | Precision | Recall | F1-score |
-|---|---:|---:|---:|---:|
-| Majority-Class Baseline | 0.8435 | 0.0000 | 0.0000 | 0.0000 |
-| Logistic Regression | 0.8869 | 0.7524 | 0.4136 | 0.5338 |
-| Logistic Regression + Balanced | 0.8460 | 0.5050 | 0.7958 | 0.6179 |
-| Decision Tree | 0.8566 | 0.5400 | 0.5654 | 0.5524 |
-| Decision Tree + Balanced | 0.8558 | 0.5412 | 0.5157 | 0.5282 |
-| Random Forest | 0.9029 | 0.7617 | 0.5524 | 0.6404 |
-| Random Forest + Balanced | 0.8931 | 0.7266 | 0.5079 | 0.5978 |
-
-If the numbers change because the code/data changed, use the **new executed results** going forward.
+If the numbers change because the code or data changed, use the new executed results going forward.
 
 ---
 
-# Step 5 — Launch the Streamlit demo
+# Step 5. Launch the Streamlit demo
 
-In the VS Code terminal, from the project root, run:
+From the project root, run:
 
 ```powershell
 streamlit run src/app.py
 ```
 
-A browser tab should open automatically.
-
-If it does not, copy the Local URL printed in the terminal into your browser.
+A browser tab should open. If it does not, copy the Local URL from the terminal into your browser.
 
 ---
 
-# Step 6 — Test the app
+# Step 6. Test the app
 
-The app should show fields for:
-- Administrative pages and duration
-- Informational pages and duration
-- Product-related pages and duration
-- Bounce rate
-- Exit rate
-- Page value
-- Special-day score
-- Month
-- Visitor type
-- Operating system code
-- Browser code
-- Region code
-- Traffic type code
-- Weekend status
+The app should show fields for administrative, informational, and product-related pages and durations, bounce rate, exit rate, page value, special-day score, month, visitor type, operating system, browser, region, traffic type, and weekend status.
 
-Enter a sample session and click **Predict**.
+Enter a sample session and click **Predict**. A successful run shows `Purchase` or `No Purchase` and a purchase probability.
 
-A successful output should display:
-- `Purchase` or `No Purchase`
-- Purchase probability
-
-Test at least **three different input combinations**.
-
-For each test, confirm:
-1. the app does not crash,
-2. a prediction appears,
-3. a probability appears,
-4. categorical fields are accepted correctly.
+Test at least three different input combinations and confirm that the app does not crash, a prediction appears, a probability appears, and categorical fields are accepted.
 
 ---
 
-# Step 7 — Stop here and review progress
+# Step 7. Note about page value
 
-At this point you will have completed the technical project through the Streamlit demo:
-
-- final executed notebook,
-- reproducible model comparison,
-- saved trained model,
-- working Streamlit interface,
-- README / dependency information,
-- dataset instructions,
-- results files.
-
-Do not move to the paper/video/final-link stage until the Streamlit app has been tested successfully.
+Page value is tied to completed transactions, so it may not be available before a purchase occurs. The demo accepts it as a user-entered input, so it shows the model on completed session data and not on a live visitor. Removing page value lowered the test F1-score from 0.6740 to 0.3843.
